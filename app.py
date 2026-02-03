@@ -1,37 +1,12 @@
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-# --- КОНФИГУРАЦИЯ ---
-TOKEN = "71876b59812fee6e1539f9365e6a12dd" 
+TOKEN = "71876b59812fee6e1539f9365e6a12dd"
 MARKER = "701004"
 
-CITY_CODES = {
-    "душанбе": "DYU", "худжанд": "LBD", "куляб": "TJU",
-    "москва": "MOW", "санкт-петербург": "LED", "стамбул": "IST",
-    "дубай": "DXB", "ташкент": "TAS", "алматы": "ALA", "анкара": "ESB"
-}
-
-def get_flights(origin, destination, date=None):
-    url = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
-    params = {
-        "origin": origin,
-        "destination": destination,
-        "departure_at": date,
-        "currency": "rub",
-        "sorting": "price",
-        "direct": "false",
-        "limit": 10,
-        "token": TOKEN
-    }
-    try:
-        response = requests.get(url, params=params, timeout=10)
-        if response.status_code == 200:
-            return response.json().get('data', [])
-        return []
-    except:
-        return []
+CITY_CODES = {"душанбе": "DYU", "москва": "MOW", "стамбул": "IST", "двубай": "DXB"}
 
 @app.route('/')
 def index():
@@ -39,15 +14,29 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    from_input = request.form.get('from', '').strip().lower()
-    to_input = request.form.get('to', '').strip().lower()
-    date = request.form.get('date')
+    from_city = request.form.get('from', '').lower()
+    to_city = request.form.get('to', '').lower()
+    origin = CITY_CODES.get(from_city, from_city.upper())
+    destination = CITY_CODES.get(to_city, to_city.upper())
     
-    origin = CITY_CODES.get(from_input, from_input.upper())
-    destination = CITY_CODES.get(to_input, to_input.upper())
+    url = f"https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
+    params = {"origin": origin, "destination": destination, "currency": "rub", "token": TOKEN}
     
-    flights = get_flights(origin, destination, date)
-    return render_template('index.html', flights=flights, marker=MARKER)
+    response = requests.get(url, params=params)
+    flights = response.json().get('data', [])
+    
+    return render_template('index.html', flights=flights, from_n=from_city.title(), to_n=to_city.title())
+
+# САҲИФАИ ТАФСИЛОТ (Маҳз барои акси 5920)
+@app.route('/details')
+def details():
+    price = request.args.get('price')
+    airline = request.args.get('airline')
+    origin = request.args.get('origin')
+    destination = request.args.get('destination')
+    dep_at = request.args.get('dep_at')
+    
+    return render_template('details.html', price=price, airline=airline, origin=origin, destination=destination, dep_at=dep_at, marker=MARKER)
 
 if __name__ == '__main__':
     app.run(debug=True)
