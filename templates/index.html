@@ -9,87 +9,170 @@
         :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
         
-        .top-header { background: var(--blue); color: white; padding: 40px 20px 80px; text-align: center; border-radius: 0 0 30px 30px; }
-        
-        .search-container { background: white; margin: -50px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .input-group { background: #f0f3f5; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; }
-        .input-group input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; padding-left: 10px; }
-        
-        .filter-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 5px; }
-        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        /* Блоки кабуди болоӣ */
+        .top-header { 
+            background: var(--blue); 
+            color: white; 
+            padding: 50px 30px 100px; 
+            text-align: center; 
+        }
+        .top-header h1 { font-size: 26px; font-weight: 800; line-height: 1.2; margin: 0; }
 
-        .ticket { background: white; margin: 10px 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--blue); }
-        .ticket.transfer { border-left-color: #ffc107; } /* Ранги зард барои пересадка */
+        /* Корти сафеди ҷустуҷӯ */
+        .search-card { 
+            background: white; 
+            margin: -60px 20px 20px; 
+            padding: 25px; 
+            border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+        }
+        .input-box { 
+            background: #f0f3f5; 
+            border-radius: 15px; 
+            padding: 15px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .input-box i { color: #888; font-size: 18px; width: 30px; }
+        .input-box input { 
+            border: none; 
+            background: transparent; 
+            width: 100%; 
+            font-size: 18px; 
+            font-weight: 500;
+            outline: none; 
+        }
 
-        .price { color: #28a745; font-size: 20px; font-weight: 800; }
-        .buy-btn { background: var(--orange); color: white; text-decoration: none; padding: 10px 15px; border-radius: 8px; font-size: 13px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        .btn-main { 
+            width: 100%; 
+            background: var(--orange); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 15px; 
+            font-size: 20px; 
+            font-weight: bold; 
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; z-index: 100; }
-        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 11px; }
-        .nav-item.active { color: var(--blue); }
+        /* Иконкаҳои меню (Горячие билеты ва ғайра) */
+        .menu-grid { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 0 15px; 
+            margin-bottom: 20px;
+        }
+        .menu-item { 
+            background: white; 
+            flex: 1; 
+            margin: 0 5px; 
+            padding: 15px 5px; 
+            border-radius: 20px; 
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .menu-item i { font-size: 22px; margin-bottom: 8px; display: block; }
+        .menu-item span { font-size: 11px; font-weight: bold; color: #333; line-height: 1.2; display: block; }
+
+        /* Баннери телефон */
+        .contact-banner {
+            background: #b3e5fc;
+            margin: 15px;
+            padding: 15px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .contact-info b { font-size: 14px; display: block; margin-bottom: 8px; }
+        .phone-pill {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Навиштаҷоти "Прямой рейс" дар форма */
+        .direct-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; }
+        .nav-link { text-align: center; color: #888; text-decoration: none; font-size: 11px; }
+        .nav-link.active { color: var(--blue); }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <h1 style="margin:0; font-size: 22px;">Тут покупают дешёвые авиабилеты</h1>
+        <h1>Тут покупают дешёвые авиабилеты</h1>
     </div>
 
-    <div class="search-container">
+    <div class="search-card">
         <form action="/search" method="post">
-            <div class="input-group">
-                <i class="fa-solid fa-plane-departure" style="color:#007bff"></i>
+            <div class="input-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" name="from" placeholder="Откуда" value="Душанбе">
             </div>
-            <div class="input-group">
-                <i class="fa-solid fa-plane-arrival" style="color:#007bff"></i>
-                <input type="text" name="to" placeholder="Куда">
+            <div class="input-box">
+                <i style="width:30px"></i> <input type="text" name="to" placeholder="Москва">
             </div>
-            <div class="input-group">
-                <i class="fa-solid fa-calendar-days" style="color:#007bff"></i>
+            <div class="input-box">
+                <i class="fa-solid fa-calendar" style="font-size:16px"></i>
                 <input type="date" name="departure_date">
             </div>
             
-            <div class="filter-row">
-                <span style="font-size: 14px; color: #444; font-weight: 500;">Танҳо парвозҳои мустақим</span>
-                <input type="checkbox" name="direct_only" value="1" style="width: 22px; height: 22px; accent-color: var(--orange);">
+            <div class="direct-toggle">
+                <span>Танҳо парвозҳои мустақим</span>
+                <input type="checkbox" name="direct_only" value="1" style="width:20px; height:20px; accent-color:var(--orange)">
             </div>
 
-            <button type="submit" class="btn-search">ЧУСТУҶӮ</button>
+            <button type="submit" class="btn-main">ЧУСТУҶӮ</button>
         </form>
     </div>
 
-    <div class="ticket-list">
-        {% for f in flights %}
-        <div class="ticket {{ 'transfer' if f.is_direct == 0 }}">
-            <div style="flex: 1;">
-                <div style="font-size: 12px; font-weight: bold; color: #333;">{{ f.logo }} {{ f.airline }}</div>
-                <div style="font-size: 17px; font-weight: bold; margin: 4px 0;">{{ f.from_city }} ✈️ {{ f.to_city }}</div>
-                <div style="font-size: 12px; color: #666;">
-                    {{ f.dep_time }} — {{ f.arr_time }} ({{ f.duration }})
-                </div>
-                {% if f.is_direct == 0 %}
-                <div style="font-size: 11px; color: #d32f2f; margin-top: 3px;">
-                    <i class="fa-solid fa-circle-exclamation"></i> Пересадка: {{ f.transfer_city }}
-                </div>
-                {% else %}
-                <div style="font-size: 11px; color: #388e3c; margin-top: 3px;">
-                    <i class="fa-solid fa-bolt"></i> Прямой рейс
-                </div>
-                {% endif %}
-            </div>
-            <div style="text-align: right; min-width: 110px;">
-                <div class="price">{{ f.price }} TJS</div>
-                <a href="{{ f.buy_url }}" target="_blank" class="buy-btn">ХАРИДАН</a>
-            </div>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <i class="fa-solid fa-fire" style="color: #ff3d00;"></i>
+            <span>Горячие билеты</span>
         </div>
-        {% endfor %}
+        <div class="menu-item">
+            <i class="fa-solid fa-earth-americas" style="color: #4caf50;"></i>
+            <span>Куда угодно</span>
+        </div>
+        <div class="menu-item">
+            <i class="fa-solid fa-route" style="color: #5c6bc0;"></i>
+            <span>Сложный маршрут</span>
+        </div>
+    </div>
+
+    <div class="contact-banner">
+        <div class="contact-info">
+            <b>Есть вопросы по билетам? Звоните</b>
+            <a href="tel:+992433778877" class="phone-pill">
+                <i class="fa-solid fa-phone" style="margin-right:8px; font-size:12px;"></i> +992 43 377 88 77
+            </a>
+        </div>
+        <i class="fa-solid fa-user-tie" style="font-size: 40px; color: #333;"></i>
     </div>
 
     <div class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fa-solid fa-plane" style="font-size: 20px;"></i><br>Авиабилеты</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-bed" style="font-size: 20px;"></i><br>Отели</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-user" style="font-size: 20px;"></i><br>Профиль</a>
+        <a href="#" class="nav-link active"><i class="fa-solid fa-plane" style="font-size:20px"></i><br>Авиабилеты</a>
+        <a href="#" class="nav-item nav-link"><i class="fa-solid fa-bed" style="font-size:20px"></i><br>Отели</a>
+        <a href="#" class="nav-item nav-link"><i class="fa-solid fa-heart" style="font-size:20px"></i><br>Избранное</a>
+        <a href="#" class="nav-item nav-link"><i class="fa-solid fa-user" style="font-size:20px"></i><br>Профиль</a>
     </div>
 
 </body>
