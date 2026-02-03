@@ -5,31 +5,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: sans-serif; background: #f2f5f8; margin: 0; }
-        .price-top { text-align: center; font-size: 32px; font-weight: 800; padding: 20px; }
-        .card { background: white; margin: 0 15px 15px; padding: 20px; border-radius: 20px; }
-        .item { display: flex; align-items: center; margin-bottom: 12px; font-size: 15px; }
-        .item i { color: #00a843; margin-right: 12px; }
-        .btn-buy { position: fixed; bottom: 20px; left: 15px; right: 15px; background: #ff6d00; color: white; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 18px; }
+        .price-big { text-align: center; font-size: 32px; font-weight: 800; padding: 30px 10px 10px; }
+        .card { background: white; margin: 15px; padding: 20px; border-radius: 20px; }
+        .check-item { display: flex; align-items: center; margin-bottom: 12px; font-size: 15px; }
+        .check-item i { color: #00a843; margin-right: 12px; }
+        .timeline { border-left: 2px solid #007aff; margin-left: 10px; padding-left: 20px; position: relative; }
+        .btn-buy { position: fixed; bottom: 20px; left: 15px; right: 15px; background: #ff6d00; color: white; text-align: center; padding: 18px; border-radius: 15px; font-weight: bold; text-decoration: none; font-size: 18px; }
     </style>
 </head>
 <body>
-    <div class="price-top">{{ f.price }} ₽</div>
-
+    <div class="price-big">{{ f.price }} ₽</div>
     <div class="card">
         <div style="font-weight:bold; font-size:18px; margin-bottom:15px;">Дешёвый тариф с багажом</div>
-        <div class="item"><i class="fa fa-check-circle"></i> Ручная кладь 1x7 кг</div>
-        <div class="item"><i class="fa fa-check-circle"></i> Багаж включен</div>
-        <div class="item"><i class="fa fa-check-circle"></i> Обмен платный</div>
+        <div class="check-item"><i class="fa fa-check-circle"></i> Ручная кладь 1x7 кг</div>
+        <div class="check-item"><i class="fa fa-check-circle"></i> Багаж включен</div>
+        <div class="check-item"><i class="fa fa-check-circle"></i> Обмен платный</div>
     </div>
-
     <div class="card">
         <div style="font-weight:bold; font-size:18px;">{{ f.origin }} — {{ f.dest }}</div>
-        <div style="margin-top:15px; display:flex; align-items:center;">
-            <img src="https://pics.avs.io/al_base/64/64/{{ f.airline }}.png" width="40">
-            <div style="margin-left:10px;"><b>{{ f.airline }}</b><br><small>4ч 5м в полёте</small></div>
+        <div style="margin: 20px 0;">
+            <div class="timeline">
+                <div><b>{{ f.time[11:16] }}</b> — {{ f.origin }}</div>
+                <div style="margin-top:40px;"><b>--:--</b> — {{ f.dest }}</div>
+            </div>
         </div>
     </div>
-
     <a href="https://www.aviasales.ru/search/{{f.origin}}{{f.dest}}?marker={{marker}}" class="btn-buy">Купить за {{ f.price }} ₽</a>
 </body>
 </html>
