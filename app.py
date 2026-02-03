@@ -3,13 +3,11 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 
 app = Flask(__name__)
 
-# Функсия барои пайваст шудан ба базаи маълумот
 def get_db_connection():
-    conn = sqlite3.connect('avia_database.db')
+    conn = sqlite3.connect('avia_business.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-# Сохтани ҷадвал ва иловаи маълумоти аввалия (Танҳо як бор иҷро мешавад)
 def init_db():
     conn = get_db_connection()
     conn.execute('DROP TABLE IF EXISTS flights')
@@ -21,54 +19,60 @@ def init_db():
             from_city TEXT,
             to_city TEXT,
             date TEXT,
+            dep_time TEXT,
+            arr_time TEXT,
+            duration TEXT,
             price INTEGER,
+            is_direct INTEGER, -- 1 барои прямой, 0 барои пересадка
             buy_url TEXT
         )
     ''')
     
-    # Илова кардани чиптаҳои намунавӣ
-    sample_flights = [
-        ('Somon Air', '✈️', 'Душанбе', 'Москва', '2026-02-10', 2500, 'https://www.somonair.com'),
-        ('Ural Airlines', '🔴', 'Душанбе', 'Хуҷанд', '2026-02-11', 450, 'https://www.uralairlines.ru'),
-        ('Turkish Airlines', '🇹🇷', 'Душанбе', 'Истанбул', '2026-02-12', 4200, 'https://www.turkishairlines.com'),
-        ('Somon Air', '✈️', 'Хуҷанд', 'Дубай', '2026-02-13', 3100, 'https://www.somonair.com')
+    # Намунаи маълумот
+    flights = [
+        ('Somon Air', '✈️', 'Душанбе', 'Москва', '2026-02-10', '08:00', '11:30', '4с 30д', 2500, 1, 'https://www.aviasales.tj'),
+        ('Ural Airlines', '🔴', 'Душанбе', 'Москва', '2026-02-12', '14:20', '17:50', '4с 30д', 2300, 1, 'https://www.uralairlines.ru'),
+        ('UTair', '🔷', 'Душанбе', 'Тюмен', '2026-02-15', '10:00', '14:00', '4с', 2100, 1, 'https://www.utair.ru'),
+        ('Turkish Airlines', '🇹🇷', 'Душанбе', 'Истанбул', '2026-02-11', '05:45', '09:20', '5с 35д', 4200, 0, 'https://www.turkishairlines.com')
     ]
-    
-    conn.executemany('''
-        INSERT INTO flights (airline, logo, from_city, to_city, date, price, buy_url)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', sample_flights)
-    
+    conn.executemany('''INSERT INTO flights 
+        (airline, logo, from_city, to_city, date, dep_time, arr_time, duration, price, is_direct, buy_url) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)''', flights)
     conn.commit()
     conn.close()
 
-# Оғози базаи маълумот ҳангоми ба кор даромадани барнома
 init_db()
 
 @app.route('/')
 def index():
-    # Гирифтани забон аз Cookies
     lang = request.cookies.get('language', 'tg')
-    
     conn = get_db_connection()
-    # Гирифтани чиптаҳо аз база
-    flights = conn.execute('SELECT * FROM flights ORDER BY price ASC').fetchall()
+    flights = conn.execute('SELECT * FROM flights ORDER BY price ASC LIMIT 10').fetchall()
     conn.close()
-    
     return render_template('index.html', flights=flights, lang=lang)
 
 @app.route('/search', methods=['POST'])
 def search():
     lang = request.cookies.get('language', 'tg')
-    start_city = request.form.get('from', '').strip()
-    end_city = request.form.get('to', '').strip()
-    
+    from_c = request.form.get('from', '').strip()
+    to_c = request.form.get('to', '').strip()
+    date = request.form.get('departure_date')
+    direct_only = request.form.get('direct_only')
+
     conn = get_db_connection()
-    # Ҷустуҷӯи динамикӣ дар базаи маълумот
     query = 'SELECT * FROM flights WHERE from_city LIKE ? AND to_city LIKE ?'
-    results = conn.execute(query, ('%' + start_city + '%', '%' + end_city + '%')).fetchall()
-    conn.close()
+    params = ['%' + from_c + '%', '%' + to_c + '%']
+
+    if date:
+        query += ' AND date = ?'
+        params.append(date)
     
+    if direct_only == '1':
+        query += ' AND is_direct = 1'
+    
+    query += ' ORDER BY price ASC'
+    results = conn.execute(query, params).fetchall()
+    conn.close()
     return render_template('index.html', flights=results, lang=lang)
 
 if __name__ == '__main__':
