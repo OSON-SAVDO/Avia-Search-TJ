@@ -3,67 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
-      (function () {
-          var script = document.createElement("script");
-          script.async = 1;
-          script.src = 'https://emrldco.com/NDk1MDAx.js?t=495001';
-          document.head.appendChild(script);
-      })();
-    </script>
-
-    <title>Aviasales.tj - Чиптаҳои арзон</title>
+    <title>Aviasales.tj - Чиптаҳои ҳақиқӣ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
-        .top-header { background: var(--blue); color: white; padding: 40px 20px 80px; text-align: center; }
-        .search-card { background: white; margin: -60px 20px 20px; padding: 25px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .input-box { background: #f0f3f5; border-radius: 15px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; }
-        .input-box input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; padding: 5px; }
-        .btn-main { width: 100%; background: var(--orange); color: white; border: none; padding: 15px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .ticket { background: white; margin: 10px 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--blue); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .price { color: #28a745; font-size: 18px; font-weight: bold; }
-        .buy-btn { background: var(--orange); color: white; text-decoration: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        .top-header { background: var(--blue); color: white; padding: 30px 20px 60px; text-align: center; border-radius: 0 0 25px 25px; }
+        .search-container { background: white; margin: -40px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .input-group { background: #f0f3f5; border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; align-items: center; }
+        .input-group input { border: none; background: transparent; width: 100%; outline: none; font-size: 16px; margin-left: 10px; }
+        
+        .ticket-card { background: white; margin: 15px; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .ticket-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #ccc; }
+        .airline-info { font-weight: bold; color: var(--blue); }
+        .ticket-body { padding: 15px; display: flex; justify-content: space-between; }
+        .city-name { font-size: 18px; font-weight: bold; }
+        .details { font-size: 12px; color: #666; margin-top: 5px; }
+        
+        .baggage-info { background: #e8f5e9; padding: 10px 15px; display: flex; gap: 15px; font-size: 13px; color: #2e7d32; }
+        .price-section { padding: 15px; background: #fffcf5; display: flex; justify-content: space-between; align-items: center; }
+        .price-val { font-size: 22px; font-weight: 900; color: #28a745; }
+        .buy-btn { background: var(--orange); color: white; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <div class="top-header">
-        <h1>Ёфтани чиптаҳои арзон</h1>
+        <h1>Ҷустуҷӯи чиптаҳо</h1>
     </div>
 
-    <div class="search-card">
+    <div class="search-container">
         <form action="/search" method="post">
-            <div class="input-box">
-                <i class="fa-solid fa-plane-departure" style="margin-right:10px; color:#888"></i>
-                <input type="text" name="from" placeholder="Аз куҷо (масалан: Душанбе)" value="Душанбе">
-            </div>
-            <div class="input-box">
-                <i class="fa-solid fa-plane-arrival" style="margin-right:10px; color:#888"></i>
-                <input type="text" name="to" placeholder="Ба куҷо (масалан: Москва)" value="Москва">
-            </div>
-            <div class="input-box">
-                <i class="fa-solid fa-calendar" style="margin-right:10px; color:#888"></i>
-                <input type="date" name="departure_date">
-            </div>
-            <button type="submit" class="btn-main">ЧУСТУҶӮ</button>
+            <div class="input-group"><i class="fa fa-plane-departure"></i><input type="text" name="from" placeholder="Аз куҷо (Код: DYU)" value="DYU"></div>
+            <div class="input-group"><i class="fa fa-plane-arrival"></i><input type="text" name="to" placeholder="Ба куҷо (Код: MOW)" value="MOW"></div>
+            <div class="input-group"><i class="fa fa-calendar"></i><input type="date" name="date"></div>
+            <button type="submit" style="width:100%; background: var(--orange); color:white; border:none; padding:15px; border-radius:12px; font-weight:bold;">ЁФТАН</button>
         </form>
     </div>
 
-    <div class="ticket-list">
+    <div class="results">
         {% for f in flights %}
-        <div class="ticket">
-            <div>
-                <div style="font-size: 14px; font-weight: bold;">{{ f.origin }} ✈️ {{ f.destination }}</div>
-                <div style="font-size: 12px; color: #888;">Сана: {{ f.departure_at[:10] }}</div>
+        <div class="ticket-card">
+            <div class="ticket-header">
+                <span class="airline-info">Рейси {{ f.airline }}</span>
+                <span style="font-size: 12px; color: #888;">{{ f.departure_at[:10] }}</span>
             </div>
-            <div style="text-align: right;">
-                <div class="price">{{ f.price }} TJS</div>
-                <a href="https://www.aviasales.tj/search/{{ f.origin }}{{ f.departure_at[8:10] }}{{ f.departure_at[5:7] }}{{ f.destination }}1?marker={{ marker }}" target="_blank" class="buy-btn">ХАРИДАН</a>
+            <div class="ticket-body">
+                <div>
+                    <div class="city-name">{{ f.origin }}</div>
+                    <div class="details">Парвоз</div>
+                </div>
+                <div style="text-align: center; color: #ccc;">
+                    <i class="fa fa-plane"></i>
+                    <div style="width: 80px; height: 1px; background: #eee; margin-top: 5px;"></div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="city-name">{{ f.destination }}</div>
+                    <div class="details">Фуруд</div>
+                </div>
+            </div>
+
+            <div class="baggage-info">
+                <span><i class="fa fa-briefcase"></i> Ручной: 5кг</span>
+                <span><i class="fa fa-suitcase"></i> Багаж: 20кг</span>
+            </div>
+
+            <div class="price-section">
+                <div class="price-val">{{ f.price }} TJS</div>
+                <a href="https://www.aviasales.tj/search/{{ f.origin }}{{ f.departure_at[8:10] }}{{ f.departure_at[5:7] }}{{ f.destination }}1?marker={{ marker }}" class="buy-btn">ХАРИДАН</a>
             </div>
         </div>
         {% endfor %}
     </div>
+
 </body>
 </html>
