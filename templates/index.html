@@ -1,79 +1,49 @@
-<!DOCTYPE html>
-<html lang="{{ lang }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ t.title }}</title>
-    <style>
-        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
-        .nav { background: #007bff; color: white; padding: 15px; border-radius: 12px; text-align: center; position: relative; }
-        .lang-switch { position: absolute; top: 10px; right: 10px; }
-        .lang-switch a { color: white; text-decoration: none; margin-left: 10px; font-weight: bold; font-size: 0.8em; border: 1px solid white; padding: 2px 5px; border-radius: 4px; }
-        .search-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin: 20px auto; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9em; color: #666; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .row { display: flex; gap: 10px; margin-bottom: 15px; }
-        button { width: 100%; background: #ff6d00; color: white; border: none; padding: 16px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .ticket { background: white; margin-bottom: 15px; padding: 20px; border-radius: 12px; border-left: 6px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 500px; margin: 15px auto; }
-        .price { color: #28a745; font-size: 1.4em; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="nav">
-        <h1>aviasales.tj</h1>
-        <div class="lang-switch">
-            <a href="/?lang=tg">TG</a>
-            <a href="/?lang=ru">RU</a>
+<style>
+    .ticket-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .airline-info { display: flex; flex-direction: column; align-items: center; width: 100px; }
+    .flight-time { font-size: 1.2em; font-weight: bold; }
+    .flight-path { flex-grow: 1; text-align: center; padding: 0 20px; color: #888; position: relative; }
+    .flight-path::after { content: "✈️"; position: absolute; top: -10px; left: 45%; }
+    .price-box { text-align: right; }
+    .buy-btn { background: #ff6d00; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 10px; }
+</style>
+
+<div class="results-container">
+    {% for flight in flights %}
+    <div class="ticket-card">
+        <div class="airline-info">
+            <span style="font-size: 2em;">{{ flight.logo }}</span>
+            <small>{{ flight.airline }}</small>
+        </div>
+        
+        <div class="flight-time">
+            <div>{{ flight.departure_time }}</div>
+            <div style="color: #999; font-size: 0.7em;">{{ flight.departure_city }}</div>
+        </div>
+
+        <div class="flight-path">
+            <hr>
+            <small>{{ flight.duration }}</small>
+        </div>
+
+        <div class="flight-time">
+            <div>{{ flight.arrival_time }}</div>
+            <div style="color: #999; font-size: 0.7em;">{{ flight.arrival_city }}</div>
+        </div>
+
+        <div class="price-box">
+            <div style="color: #28a745; font-size: 1.5em; font-weight: bold;">{{ flight.price }} {{ t.currency }}</div>
+            <a href="#" class="buy-btn">ХАРИДАН</a>
         </div>
     </div>
-
-    <div class="search-box">
-        <form action="/search?lang={{ lang }}" method="post">
-            <div class="input-group">
-                <label>{{ t.from }}</label>
-                <input type="text" name="from" placeholder="{{ t.placeholder_from }}" required>
-            </div>
-            <div class="input-group">
-                <label>{{ t.to }}</label>
-                <input type="text" name="to" placeholder="{{ t.placeholder_to }}" required>
-            </div>
-            <div class="input-group">
-                <label>{{ t.date }}</label>
-                <input type="date" name="departure_date" required>
-            </div>
-            <div class="row">
-                <div style="flex:1">
-                    <label>{{ t.adults }}</label>
-                    <select name="adults">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-                <div style="flex:1">
-                    <label>{{ t.children }}</label>
-                    <select name="children">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit">{{ t.search_btn }}</button>
-        </form>
-    </div>
-
-    <div class="results">
-        {% if flights %}
-            {% for flight in flights %}
-            <div class="ticket">
-                <h3>{{ flight.from }} ✈️ {{ flight.to }}</h3>
-                <p>{{ t.date }}: {{ flight.date }}</p>
-                <div class="price">{{ flight.price }} TJS</div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p style="text-align:center">{{ t.no_results }}</p>
-        {% endif %}
-    </div>
-</body>
-</html>
+    {% endfor %}
+</div>
