@@ -1,42 +1,49 @@
 import requests
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-TOKEN = "71876b59812fee6e1539f9365e6a12dd"
+TOKEN = "71876b59812fee6e1539f9365e6a12dd" # Маркер: 701004
 MARKER = "701004"
 
-CITY_CODES = {"душанбе": "DYU", "москва": "MOW", "стамбул": "IST", "двубай": "DXB"}
+# Функсия барои ёфтани кодҳои IATA (масалан Москва -> MOW, SVO, DME)
+def get_iata_code(query):
+    url = f"https://autocomplete.travelpayouts.com/places2?term={query}&locale=ru&types[]=city&types[]=airport"
+    try:
+        res = requests.get(url).json()
+        return res[0]['code'] if res else query.upper()
+    except:
+        return query.upper()
 
 @app.route('/')
 def index():
-    return render_template('index.html', flights=[])
+    return render_template('index.html')
 
 @app.route('/search', methods=['POST'])
 def search():
-    from_city = request.form.get('from', '').lower()
-    to_city = request.form.get('to', '').lower()
-    origin = CITY_CODES.get(from_city, from_city.upper())
-    destination = CITY_CODES.get(to_city, to_city.upper())
-    
-    url = f"https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
-    params = {"origin": origin, "destination": destination, "currency": "rub", "token": TOKEN}
-    
-    response = requests.get(url, params=params)
-    flights = response.json().get('data', [])
-    
-    return render_template('index.html', flights=flights, from_n=from_city.title(), to_n=to_city.title())
+    from_city = request.form.get('from')
+    to_city = request.form.get('to')
+    date = request.form.get('date')
 
-# САҲИФАИ ТАФСИЛОТ (Маҳз барои акси 5920)
-@app.route('/details')
-def details():
-    price = request.args.get('price')
-    airline = request.args.get('airline')
-    origin = request.args.get('origin')
-    destination = request.args.get('destination')
-    dep_at = request.args.get('dep_at')
+    # Табдили номи шаҳр ба код (масалан Москва -> MOW)
+    origin = get_iata_code(from_city)
+    destination = get_iata_code(to_city)
+
+    url = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
+    params = {
+        "origin": origin,
+        "destination": destination,
+        "departure_at": date,
+        "unique": "false", # Барои он ки тамоми фурудгоҳҳоро нишон диҳад
+        "sorting": "price",
+        "token": TOKEN,
+        "currency": "rub"
+    }
     
-    return render_template('details.html', price=price, airline=airline, origin=origin, destination=destination, dep_at=dep_at, marker=MARKER)
+    response = requests.get(url, params=params).json()
+    flights = response.get('data', [])
+    
+    return render_template('index.html', flights=flights, from_n=from_city, to_n=to_city)
 
 if __name__ == '__main__':
     app.run(debug=True)
