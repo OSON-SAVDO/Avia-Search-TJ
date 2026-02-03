@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #f2f5f8; margin: 0; color: #262626; }
+        .header-nav { padding: 15px; display: flex; align-items: center; justify-content: space-between; background: white; }
+        .price-big { font-size: 30px; font-weight: 800; text-align: center; margin: 10px 0; }
+        
+        .card { background: white; border-radius: 20px; margin: 15px; padding: 20px; }
+        .check-item { display: flex; align-items: center; margin-bottom: 12px; font-size: 15px; }
+        .check-item i { color: #00a843; margin-right: 10px; }
+        
+        .upgrade { background: #f0f3f5; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; font-size: 14px; }
+        
+        .timeline { position: relative; padding-left: 25px; border-left: 2px solid #007aff; margin-left: 10px; }
+        .btn-buy { position: fixed; bottom: 20px; left: 15px; right: 15px; background: #ff6d00; color: white; padding: 18px; border-radius: 15px; text-align: center; font-weight: bold; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header-nav">
+        <i class="fa fa-arrow-left" onclick="history.back()"></i>
+        <div style="font-size: 14px;">за 1 пассажира</div>
+        <i class="fa fa-share-nodes"></i>
+    </div>
+
+    <div class="price-big">{{ price }} ₽</div>
+
+    <div class="card">
+        <div style="font-weight: bold; margin-bottom: 15px; font-size: 18px;">Дешёвый тариф с багажом</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Ручная кладь 1x7 кг</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Багаж</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Обмен платный</div>
+        <div class="upgrade">Обмен или возврат <b style="color:#007aff;">+1 222 ₽</b> <i class="fa fa-chevron-right"></i></div>
+    </div>
+
+    <div class="card">
+        <div style="font-weight: bold; font-size: 18px;">{{ origin }} — {{ destination }}</div>
+        <div style="display: flex; align-items: center; margin: 15px 0;">
+            <img src="https://pics.avs.io/al_base/64/64/{{ airline }}.png" width="40">
+            <div style="margin-left: 10px;"><b>{{ airline }}</b><br><small>4ч 5м в полёте</small></div>
+        </div>
+        <div class="timeline">
+            <div><b>{{ dep_at[11:16] }}</b> — {{ origin }}</div>
+            <div style="margin-top: 30px;"><b>--:--</b> — {{ destination }}</div>
+        </div>
+    </div>
+
+    <a href="https://www.aviasales.ru/search/{{origin}}{{dep_at[8:10]}}{{dep_at[5:7]}}{{destination}}1?marker={{marker}}" class="btn-buy">Купить за {{ price }} ₽</a>
+</body>
+</html>
