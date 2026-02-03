@@ -1,71 +1,138 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avia-Search TJ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f2f5f8; margin: 0; padding-bottom: 30px; }
-        .search-header { background: #007aff; padding: 20px; color: white; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .input-box { background: white; margin: -20px 15px 20px; padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        input { width: 90%; border: none; padding: 12px; font-size: 16px; outline: none; border-bottom: 1px solid #eee; }
+        :root { --blue: #007aff; --orange: #ff6d00; --bg: #f2f5f8; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; }
         
-        /* Стили билета как на фото 5920 */
-        .ticket-card { background: white; margin: 15px; border-radius: 20px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .price-row { font-size: 26px; font-weight: 800; color: #262626; margin-bottom: 15px; }
-        
-        .flight-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .airline-img { width: 40px; height: 40px; border-radius: 50%; }
-        
-        .timeline { position: relative; padding-left: 20px; border-left: 2px solid #007aff; margin-left: 10px; }
-        .time-item { margin-bottom: 20px; position: relative; }
-        .time-item::before { content: ''; position: absolute; left: -26px; top: 5px; width: 10px; height: 10px; background: white; border: 2px solid #007aff; border-radius: 50%; }
-        
-        .time-bold { font-size: 18px; font-weight: bold; }
-        .city-gray { color: #8c8c8c; font-size: 14px; }
+        /* Кисми болоии кабуд (Акси 5899) */
+        .header-blue { 
+            background: var(--blue); 
+            color: white; 
+            padding: 50px 20px 80px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+        }
 
-        .btn-buy { background: #ff6d00; color: white; display: block; text-align: center; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 10px; }
+        /* Формаи чустучу */
+        .search-container { 
+            background: white; 
+            margin: -50px 20px 20px; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        .input-group { 
+            background: #f0f3f5; 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .input-group i { color: #888; margin-right: 15px; font-size: 18px; }
+        .input-group input { 
+            border: none; 
+            background: transparent; 
+            width: 100%; 
+            outline: none; 
+            font-size: 16px; 
+            font-weight: 500;
+        }
+
+        .btn-search { 
+            width: 100%; 
+            background: var(--orange); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            font-size: 18px; 
+            margin-top: 10px; 
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Блокхои иловаги (Горячие билеты и т.д.) */
+        .extra-options { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 10px; 
+            padding: 0 20px; 
+            margin-top: 20px; 
+        }
+        .option-card { 
+            background: white; 
+            padding: 15px 5px; 
+            border-radius: 15px; 
+            text-align: center; 
+            font-size: 11px; 
+            font-weight: bold; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .option-card i { font-size: 20px; margin-bottom: 8px; display: block; }
+
+        /* Блоки тамос */
+        .contact-box {
+            background: #cdeaff;
+            margin: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .contact-info { font-size: 13px; font-weight: bold; }
+        .phone-btn { 
+            background: white; 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            text-decoration: none; 
+            color: black; 
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="search-header"><h2>Поиск билетов</h2></div>
-
-<div class="input-box">
-    <form action="/search" method="post">
-        <input type="text" name="from" placeholder="Откуда (Москва, Душанбе...)" required>
-        <input type="text" name="to" placeholder="Куда (Стамбул, Дубай...)" required>
-        <input type="date" name="date" style="border:none">
-        <button type="submit" style="width:100%; background:#007aff; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold;">Найти билеты</button>
-    </form>
-</div>
-
-{% for f in flights %}
-<div class="ticket-card">
-    <div class="price-row">{{ f.price }} ₽</div>
-    
-    <div class="flight-info">
-        <img src="https://pics.avs.io/al_base/64/64/{{ f.airline }}.png" class="airline-img">
-        <div>
-            <div style="font-weight:bold">{{ f.airline }}</div>
-            <div class="city-gray">В пути: {{ f.duration // 60 }}ч {{ f.duration % 60 }}м</div>
-        </div>
+    <div class="header-blue">
+        Тут покупают дешёвые авиабилеты
     </div>
 
-    <div class="timeline">
-        <div class="time-item">
-            <span class="time-bold">{{ f.departure_at[11:16] }}</span> 
-            <span class="city-gray">{{ f.origin }} (Вылет)</span>
-        </div>
-        <div class="time-item" style="margin-bottom:0">
-            <span class="time-bold">--:--</span> 
-            <span class="city-gray">{{ f.destination }} (Прилет)</span>
-        </div>
+    <div class="search-container">
+        <form action="/search" method="post">
+            <div class="input-group">
+                <i class="fa fa-search"></i>
+                <input type="text" name="from" placeholder="Душанбе" required>
+            </div>
+            <div class="input-group">
+                <input type="text" name="to" placeholder="Москва" style="margin-left: 33px;" required>
+            </div>
+            <button type="submit" class="btn-search">ҶУСТУҶӮ</button>
+        </form>
     </div>
 
-    <a href="https://www.aviasales.ru/search/{{f.origin}}{{f.destination}}?marker={{marker}}" class="btn-buy">Купить за {{ f.price }} ₽</a>
-</div>
-{% endfor %}
+    <div class="extra-options">
+        <div class="option-card"><i class="fa fa-fire" style="color: #ff3b30;"></i>Горячие билеты</div>
+        <div class="option-card"><i class="fa fa-globe" style="color: #4cd964;"></i>Куда угодно</div>
+        <div class="option-card"><i class="fa fa-route" style="color: #5856d6;"></i>Сложный маршрут</div>
+    </div>
+
+    <div class="contact-box">
+        <div class="contact-info">Есть вопросы по билетам? Звоните</div>
+        <a href="tel:+992433778877" class="phone-btn">
+            <i class="fa fa-phone"></i> +992 43 377 88 77
+        </a>
+    </div>
 
 </body>
 </html>
