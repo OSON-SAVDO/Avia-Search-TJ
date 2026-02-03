@@ -4,8 +4,8 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # ↓↓↓ ДАР ИН ҶО ГУЗОР (АПИ ТОКЕН ВА МАРКЕРРО) ↓↓↓
-TOKEN = "ИНҶО_API_TOKEN_РО_ГУЗОР" # Сатри 8
-MARKER = "ИНҶО_МАРКЕР_РО_ГУЗОР" # Сатри 9
+TOKEN = "71876b59812fee6e1539f9365e6a12dd" # Сатри 8
+MARKER = "701004" # Сатри 9
 # ↑↑↑ ТО ИН ҶО ↑↑↑
 
 CITY_CODES = {
