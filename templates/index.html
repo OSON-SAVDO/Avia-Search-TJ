@@ -3,74 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviasales.tj — Поиск авиабилетов</title>
+    <title>Поиск билетов — Aviasales Clone</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        .header { background: var(--blue); color: white; padding: 25px 15px 55px; text-align: center; border-radius: 0 0 20px 20px; }
-        .search-container { background: white; margin: -35px 15px 20px; padding: 15px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .input-group { background: #f0f3f5; border-radius: 10px; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; }
-        .input-group input { border: none; background: transparent; width: 100%; outline: none; font-size: 16px; margin-left: 10px; }
-        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; }
+        :root { --blue: #007aff; --orange: #ff6d00; --bg: #f2f5f8; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 20px; color: #262626; }
+        
+        /* Header */
+        .header { background: var(--blue); color: white; padding: 20px 15px 50px; text-align: center; border-radius: 0 0 20px 20px; }
+        .header h2 { margin: 0; font-size: 20px; }
 
-        .ticket { background: white; margin: 12px; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .ticket-top { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 22px; font-weight: 800; color: #28a745; }
-        .airline-logo { width: 45px; border-radius: 5px; }
+        /* Форма поиска */
+        .search-box { background: white; margin: -30px 15px 20px; padding: 15px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .input-item { background: #f0f3f5; border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; }
+        .input-item input { border: none; background: transparent; width: 100%; outline: none; font-size: 16px; margin-left: 10px; }
+        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        .flight-path { padding: 0 15px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .time { font-size: 18px; font-weight: bold; }
-        .airport { font-size: 12px; color: #888; text-transform: uppercase; }
+        /* Список билетов */
+        .ticket-list { padding: 0 10px; }
+        .ticket-link { text-decoration: none; color: inherit; display: block; margin-bottom: 12px; }
+        
+        .ticket-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .ticket-card:active { transform: scale(0.98); background: #fafafa; }
 
-        /* БЛОК БАГАЖА */
-        .baggage-section { background: #fdfdfd; border-top: 1px solid #eee; padding: 12px 15px; display: flex; justify-content: space-between; }
-        .bag-info { font-size: 12px; display: flex; align-items: center; gap: 5px; color: #555; }
-        .bag-info i { color: #007bff; }
-        .extra-bag { color: var(--orange); font-weight: bold; cursor: help; border-bottom: 1px dashed var(--orange); }
+        .price { font-size: 22px; font-weight: 800; color: #00a843; margin-bottom: 4px; }
+        .airline-name { font-size: 13px; color: #8c8c8c; font-weight: 500; }
+        
+        .route-info { text-align: right; }
+        .route-cities { font-size: 14px; font-weight: bold; color: #444; }
+        .chevron { color: #ccc; margin-left: 15px; font-size: 18px; }
 
-        .btn-buy { display: block; background: var(--orange); color: white; text-align: center; text-decoration: none; padding: 14px; margin: 10px 15px 15px; border-radius: 10px; font-weight: bold; }
+        .no-results { text-align: center; margin-top: 40px; color: #8c8c8c; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h3>Aviasales Клон</h3></div>
+    <div class="header">
+        <h2>Поиск дешёвых билетов</h2>
+    </div>
 
-    <div class="search-container">
+    <div class="search-box">
         <form action="/search" method="post">
-            <div class="input-group"><i class="fa fa-location-dot"></i><input type="text" name="from" placeholder="Откуда (Душанбе)" required></div>
-            <div class="input-group"><i class="fa fa-plane-arrival"></i><input type="text" name="to" placeholder="Куда (Москва)" required></div>
-            <div class="input-group"><i class="fa fa-calendar"></i><input type="date" name="date"></div>
+            <div class="input-item">
+                <i class="fa fa-location-dot" style="color: #888;"></i>
+                <input type="text" name="from" placeholder="Откуда (Душанбе)" required>
+            </div>
+            <div class="input-item">
+                <i class="fa fa-plane-arrival" style="color: #888;"></i>
+                <input type="text" name="to" placeholder="Куда (Москва)" required>
+            </div>
+            <div class="input-item">
+                <i class="fa fa-calendar" style="color: #888;"></i>
+                <input type="date" name="date">
+            </div>
             <button type="submit" class="btn-search">Найти билеты</button>
         </form>
     </div>
 
-    {% for f in flights %}
-    <div class="ticket">
-        <div class="ticket-top">
-            <div class="price">{{ f.price }} ₽</div>
-            <img src="https://pics.avs.io/al_base/64/64/{{ f.airline }}.png" class="airline-logo" alt="Logo">
-        </div>
-
-        <div class="flight-path">
-            <div><div class="time">{{ f.departure_at[11:16] }}</div><div class="airport">{{ f.origin }}</div></div>
-            <div style="flex-grow: 1; text-align: center; color: #ddd; position: relative;">
-                <div style="height: 1px; background: #eee; width: 80%; margin: 0 auto;"></div>
-                <i class="fa fa-plane" style="font-size: 12px; position: absolute; top: -6px; left: 48%;"></i>
-                <div style="font-size: 10px; color: #aaa; margin-top: 5px;">{% if f.number_of_changes == 0 %}Прямой{% else %}{{ f.number_of_changes }} пересадка{% endif %}</div>
+    <div class="ticket-list">
+        {% if flights %}
+            <div style="padding-left: 15px; margin-bottom: 10px; font-size: 14px; color: #8c8c8c; font-weight: bold;">
+                НАЙДЕНО: {{ flights|length }}
             </div>
-            <div style="text-align: right;"><div class="time">--:--</div><div class="airport">{{ f.destination }}</div></div>
-        </div>
-
-        <div class="baggage-section">
-            <div class="bag-info"><i class="fa fa-briefcase"></i> Ручная: 10кг</div>
-            <div class="bag-info"><i class="fa fa-suitcase"></i> Багаж: 23кг</div>
-            <div class="bag-info extra-bag"><i class="fa fa-plus-circle"></i> +Багаж</div>
-        </div>
-
-        <a href="https://www.aviasales.ru/search/{{ f.origin }}{{ f.departure_at[8:10] }}{{ f.departure_at[5:7] }}{{ f.destination }}1?marker={{ marker }}" target="_blank" class="btn-buy">Купить за {{ f.price }} ₽</a>
+            {% for f in flights %}
+            <a href="/details?price={{f.price}}&airline={{f.airline}}&origin={{f.origin}}&destination={{f.destination}}&dep_at={{f.departure_at}}" class="ticket-link">
+                <div class="ticket-card">
+                    <div>
+                        <div class="price">{{ f.price }} ₽</div>
+                        <div class="airline-name">
+                            <img src="https://pics.avs.io/al_base/32/32/{{ f.airline }}.png" style="vertical-align: middle; margin-right: 5px;">
+                            {{ f.airline }}
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center;">
+                        <div class="route-info">
+                            <div class="route-cities">{{ f.origin }} — {{ f.destination }}</div>
+                            <div style="font-size: 12px; color: #aaa; margin-top: 3px;">Нажмите для деталей</div>
+                        </div>
+                        <i class="fa fa-chevron-right chevron"></i>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        {% elif request.method == 'POST' %}
+            <div class="no-results">
+                <i class="fa-regular fa-face-frown" style="font-size: 40px; margin-bottom: 10px;"></i>
+                <div>Билеты не найдены. <br>Попробуйте другие города.</div>
+            </div>
+        {% endif %}
     </div>
-    {% endfor %}
 
 </body>
 </html>
