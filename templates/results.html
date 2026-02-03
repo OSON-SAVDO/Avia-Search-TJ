@@ -1,0 +1,14 @@
+{% for f in flights %}
+<a href="/ticket_details?price={{f.price}}&airline={{f.airline}}&origin={{f.origin}}&dest={{f.destination}}&time={{f.departure_at}}" style="text-decoration:none; color:inherit;">
+    <div style="background:white; margin:15px; padding:20px; border-radius:15px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div style="font-size:22px; font-weight:bold;">{{ f.price }} ₽</div>
+            <div style="color:gray;">{{ f.airline }}</div>
+        </div>
+        <div style="text-align:right;">
+            <div style="font-weight:bold;">{{ f.departure_at[11:16] }}</div>
+            <div style="font-size:12px; color:gray;">{{ f.origin }} — {{ f.destination }}</div>
+        </div>
+    </div>
+</a>
+{% endfor %}
