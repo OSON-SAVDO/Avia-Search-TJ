@@ -1,51 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ lang }}">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviasales.tj - Клон</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f3f5; }
-        .ticket { 
-            background: white; border-radius: 12px; display: flex; 
-            max-width: 700px; margin: 15px auto; overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .left-side { padding: 20px; flex-grow: 1; border-right: 1px dashed #ddd; }
-        .right-side { 
-            padding: 20px; min-width: 150px; text-align: center; 
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .price { font-size: 22px; font-weight: bold; color: #28a745; margin-bottom: 10px; }
-        .buy-button { 
-            background: #ff6d00; color: white; text-decoration: none; 
-            padding: 10px 20px; border-radius: 8px; font-weight: bold;
-        }
-        .flight-info { display: flex; justify-content: space-between; align-items: center; }
-        .time { font-size: 18px; font-weight: bold; }
-        .city { font-size: 12px; color: #888; }
-        .airline { font-size: 12px; font-weight: bold; margin-bottom: 10px; display: block; }
+        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 70px; }
+        
+        /* Header Blue Section */
+        .top-header { background: var(--blue); color: white; padding: 40px 20px 80px; text-align: center; border-radius: 0 0 30px 30px; }
+        .top-header h1 { font-size: 24px; margin: 0; }
+
+        /* Search Container */
+        .search-container { background: white; margin: -50px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .search-input-group { background: #f0f3f5; border-radius: 15px; padding: 10px; margin-bottom: 10px; display: flex; align-items: center; }
+        .search-input-group i { color: #888; margin-right: 10px; }
+        .search-input-group input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; padding: 5px; }
+
+        /* Icon Menu (Quick Actions) */
+        .quick-actions { display: flex; justify-content: space-around; margin: 20px 15px; }
+        .action-item { background: white; padding: 15px 10px; border-radius: 15px; text-align: center; flex: 1; margin: 0 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .action-item i { font-size: 20px; margin-bottom: 5px; display: block; }
+        .action-item span { font-size: 11px; font-weight: bold; color: #333; }
+
+        /* Banner Call */
+        .call-banner { background: #b3e5fc; margin: 15px; padding: 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .call-banner i { font-size: 40px; color: #333; }
+        .btn-call { background: white; padding: 10px 15px; border-radius: 12px; text-decoration: none; color: black; font-weight: bold; font-size: 14px; display: flex; align-items: center; }
+
+        /* Ticket Cards */
+        .hot-tickets { background: var(--orange); margin: 15px; padding: 20px; border-radius: 20px; color: white; }
+        .ticket-list { padding: 0 15px; }
+        .ticket { background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .price { color: var(--blue); font-size: 18px; font-weight: 800; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd; }
+        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 10px; }
+        .nav-item.active { color: var(--blue); }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
-    {% for flight in flights %}
-    <div class="ticket">
-        <div class="left-side">
-            <span class="airline">{{ flight.logo }} {{ flight.airline }}</span>
-            <div class="flight-info">
-                <div>
-                    <div class="time">{{ flight.dep_time }}</div>
-                    <div class="city">{{ flight.from_city }}</div>
-                </div>
-                <div style="color: #ccc;">── {{ flight.duration }} ──</div>
-                <div>
-                    <div class="time">{{ flight.arr_time }}</div>
-                    <div class="city">{{ flight.arrival_city }}</div>
-                </div>
+
+    <div class="top-header">
+        <h1>Тут покупают дешёвые авиабилеты</h1>
+    </div>
+
+    <div class="search-container">
+        <form action="/search" method="post">
+            <div class="search-input-group">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="from" value="Душанбе" placeholder="Откуда">
             </div>
+            <div class="search-input-group">
+                <i class="fa-solid fa-location-dot" style="color: transparent;"></i>
+                <input type="text" name="to" placeholder="Куда">
+            </div>
+            <button type="submit" style="width:100%; background: var(--orange); color:white; border:none; padding:15px; border-radius:12px; font-weight:bold; font-size:16px;">ЧУСТУҶӮ</button>
+        </form>
+    </div>
+
+    <div class="quick-actions">
+        <div class="action-item">
+            <i class="fa-solid fa-fire" style="color: #ff3d00;"></i>
+            <span>Горячие билеты</span>
         </div>
-        <div class="right-side">
-            <div class="price">{{ flight.price }} TJS</div>
-            <a href="{{ flight.buy_url }}" target="_blank" class="buy-button">{{ t.buy }}</a>
+        <div class="action-item">
+            <i class="fa-solid fa-earth-americas" style="color: #4caf50;"></i>
+            <span>Куда угодно</span>
+        </div>
+        <div class="action-item">
+            <i class="fa-solid fa-route" style="color: #5c6bc0;"></i>
+            <span>Сложный маршрут</span>
         </div>
     </div>
-    {% endfor %}
+
+    <div class="call-banner">
+        <div>
+            <div style="font-size: 14px; font-weight: bold;">Есть вопросы по билетам? Звоните</div>
+            <a href="tel:+992433778877" class="btn-call" style="margin-top: 10px;">
+                <i class="fa-solid fa-phone" style="font-size: 14px; margin-right: 10px;"></i> +992 43 377 88 77
+            </a>
+        </div>
+        <i class="fa-solid fa-user-tie"></i>
+    </div>
+
+    <div class="hot-tickets">
+        <h2 style="margin: 0; font-size: 20px;">Горячие билеты</h2>
+        <p style="margin: 5px 0 0; font-size: 12px;">Скоро разберут!</p>
+    </div>
+
+    <div class="ticket-list">
+        {% for f in flights %}
+        <div class="ticket">
+            <div>
+                <div style="font-weight: bold;">{{ f.from_city }} ✈️ {{ f.to_city }}</div>
+                <div style="font-size: 12px; color: #888;">{{ f.date }}</div>
+            </div>
+            <div class="price">{{ f.price }} TJS</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fa-solid fa-plane"></i>Авиабилеты</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-bed"></i>Отели</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-heart"></i>Избранное</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i>Профиль</a>
+    </div>
+
 </body>
 </html>
