@@ -1,78 +1,55 @@
-import sqlite3
-from flask import Flask, render_template, request, make_response
+import requests
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-def get_db_connection():
-    conn = sqlite3.connect('avia_search.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+# САТРҲОИ 8 ва 9: МАЪЛУМОТИ API-И ХУДРО ИНҶО ГУЗОРЕД
+TOKEN = "<script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.src = 'https://emrldco.com/NDk1MDAx.js?t=495001';
+      document.head.appendChild(script);
+  })();
+</script>"  # Аз Travelpayouts гиред
+MARKER = ""    # Аз Travelpayouts гиред
 
-def init_db():
-    conn = get_db_connection()
-    conn.execute('DROP TABLE IF EXISTS flights')
-    conn.execute('''
-        CREATE TABLE flights (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            airline TEXT,
-            logo TEXT,
-            from_city TEXT,
-            to_city TEXT,
-            date TEXT,
-            dep_time TEXT,
-            arr_time TEXT,
-            duration TEXT,
-            price INTEGER,
-            is_direct INTEGER, -- 1 барои прямой, 0 барои бо пересадка
-            transfer_city TEXT, -- Шаҳри пересадка (агар бошад)
-            buy_url TEXT
-        )
-    ''')
-    
-    # Иловаи маълумоти намунавӣ (Прямой ва Пересадка)
-    flights = [
-        ('Somon Air', '✈️', 'Душанбе', 'Москва', '2026-02-10', '08:00', '11:30', '4с 30д', 2500, 1, '', 'https://www.somonair.com'),
-        ('Ural Airlines', '🔴', 'Душанбе', 'Москва', '2026-02-12', '14:20', '17:50', '4с 30д', 2300, 1, '', 'https://www.uralairlines.ru'),
-        ('UTair', '🔷', 'Душанбе', 'Тюмен', '2026-02-15', '10:00', '14:00', '4с', 2100, 1, '', 'https://www.utair.ru'),
-        ('Turkish Airlines', '🇹🇷', 'Душанбе', 'Тюмен', '2026-02-15', '05:45', '16:20', '10с 35д', 3200, 0, 'Истанбул', 'https://www.turkishairlines.com')
-    ]
-    conn.executemany('''INSERT INTO flights 
-        (airline, logo, from_city, to_city, date, dep_time, arr_time, duration, price, is_direct, transfer_city, buy_url) 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)''', flights)
-    conn.commit()
-    conn.close()
+# Луғати кодҳои шаҳрҳо (IATA)
+CITY_CODES = {
+    "Душанбе": "DYU", "Хуҷанд": "LBD", "Москва": "MOW", 
+    "Санкт-Петербург": "LED", "Истанбул": "IST", "Дубай": "DXB"
+}
 
-init_db()
+def get_real_flights(origin, destination, date=None):
+    url = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
+    params = {
+        "origin": origin, "destination": destination,
+        "departure_at": date, "currency": "tjs",
+        "sorting": "price", "direct": "false",
+        "limit": 10, "token": TOKEN
+    }
+    try:
+        response = requests.get(url, params=params)
+        return response.json().get('data', [])
+    except:
+        return []
 
 @app.route('/')
 def index():
-    conn = get_db_connection()
-    flights = conn.execute('SELECT * FROM flights ORDER BY price ASC LIMIT 10').fetchall()
-    conn.close()
-    return render_template('index.html', flights=flights)
+    return render_template('index.html', flights=[])
 
 @app.route('/search', methods=['POST'])
 def search():
-    from_c = request.form.get('from', '').strip()
-    to_c = request.form.get('to', '').strip()
+    from_city = request.form.get('from', 'Душанбе')
+    to_city = request.form.get('to', 'Москва')
     date = request.form.get('departure_date')
-    direct_only = request.form.get('direct_only')
-
-    conn = get_db_connection()
-    query = 'SELECT * FROM flights WHERE from_city LIKE ? AND to_city LIKE ?'
-    params = ['%' + from_c + '%', '%' + to_c + '%']
-
-    if date:
-        query += ' AND date = ?'
-        params.append(date)
     
-    if direct_only == '1':
-        query += ' AND is_direct = 1'
+    # Табдил додани номи шаҳр ба код (масалан: Душанбе -> DYU)
+    origin = CITY_CODES.get(from_city, "DYU")
+    dest = CITY_CODES.get(to_city, "MOW")
     
-    query += ' ORDER BY price ASC'
-    results = conn.execute(query, params).fetchall()
-    conn.close()
-    return render_template('index.html', flights=results)
+    flights = get_real_flights(origin, dest, date)
+    return render_template('index.html', flights=flights, marker=MARKER)
 
 if __name__ == '__main__':
     app.run(debug=True)
