@@ -7,50 +7,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
         
         .top-header { background: var(--blue); color: white; padding: 40px 20px 80px; text-align: center; border-radius: 0 0 30px 30px; }
         
         .search-container { background: white; margin: -50px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .input-group { background: #f0f3f5; border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; align-items: center; }
+        .input-group { background: #f0f3f5; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; }
         .input-group input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; padding-left: 10px; }
         
-        .filter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 0 5px; }
-        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .filter-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 5px; }
+        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        .ticket { background: white; margin: 10px 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .price { color: var(--blue); font-size: 18px; font-weight: bold; }
-        .buy-btn { background: var(--orange); color: white; text-decoration: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        .ticket { background: white; margin: 10px 15px; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--blue); }
+        .ticket.transfer { border-left-color: #ffc107; } /* Ранги зард барои пересадка */
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; }
-        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 10px; }
+        .price { color: #28a745; font-size: 20px; font-weight: 800; }
+        .buy-btn { background: var(--orange); color: white; text-decoration: none; padding: 10px 15px; border-radius: 8px; font-size: 13px; font-weight: bold; display: inline-block; margin-top: 5px; }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #ddd; z-index: 100; }
+        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 11px; }
         .nav-item.active { color: var(--blue); }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <h1>Тут покупают дешёвые авиабилеты</h1>
+        <h1 style="margin:0; font-size: 22px;">Тут покупают дешёвые авиабилеты</h1>
     </div>
 
     <div class="search-container">
         <form action="/search" method="post">
             <div class="input-group">
-                <i class="fa-solid fa-plane-departure"></i>
+                <i class="fa-solid fa-plane-departure" style="color:#007bff"></i>
                 <input type="text" name="from" placeholder="Откуда" value="Душанбе">
             </div>
             <div class="input-group">
-                <i class="fa-solid fa-plane-arrival"></i>
+                <i class="fa-solid fa-plane-arrival" style="color:#007bff"></i>
                 <input type="text" name="to" placeholder="Куда">
             </div>
             <div class="input-group">
-                <i class="fa-solid fa-calendar-days"></i>
+                <i class="fa-solid fa-calendar-days" style="color:#007bff"></i>
                 <input type="date" name="departure_date">
             </div>
             
             <div class="filter-row">
-                <span style="font-size: 13px; color: #666;">Танҳо парвозҳои мустақим</span>
-                <input type="checkbox" name="direct_only" value="1" style="width: 20px; height: 20px;">
+                <span style="font-size: 14px; color: #444; font-weight: 500;">Танҳо парвозҳои мустақим</span>
+                <input type="checkbox" name="direct_only" value="1" style="width: 22px; height: 22px; accent-color: var(--orange);">
             </div>
 
             <button type="submit" class="btn-search">ЧУСТУҶӮ</button>
@@ -59,13 +61,24 @@
 
     <div class="ticket-list">
         {% for f in flights %}
-        <div class="ticket">
-            <div>
-                <div style="font-size: 12px; color: #888;">{{ f.logo }} {{ f.airline }}</div>
-                <div style="font-weight: bold; margin: 5px 0;">{{ f.from_city }} ✈️ {{ f.to_city }}</div>
-                <div style="font-size: 11px; color: #555;">{{ f.date }} | {{ f.dep_time }}</div>
+        <div class="ticket {{ 'transfer' if f.is_direct == 0 }}">
+            <div style="flex: 1;">
+                <div style="font-size: 12px; font-weight: bold; color: #333;">{{ f.logo }} {{ f.airline }}</div>
+                <div style="font-size: 17px; font-weight: bold; margin: 4px 0;">{{ f.from_city }} ✈️ {{ f.to_city }}</div>
+                <div style="font-size: 12px; color: #666;">
+                    {{ f.dep_time }} — {{ f.arr_time }} ({{ f.duration }})
+                </div>
+                {% if f.is_direct == 0 %}
+                <div style="font-size: 11px; color: #d32f2f; margin-top: 3px;">
+                    <i class="fa-solid fa-circle-exclamation"></i> Пересадка: {{ f.transfer_city }}
+                </div>
+                {% else %}
+                <div style="font-size: 11px; color: #388e3c; margin-top: 3px;">
+                    <i class="fa-solid fa-bolt"></i> Прямой рейс
+                </div>
+                {% endif %}
             </div>
-            <div style="text-align: right;">
+            <div style="text-align: right; min-width: 110px;">
                 <div class="price">{{ f.price }} TJS</div>
                 <a href="{{ f.buy_url }}" target="_blank" class="buy-btn">ХАРИДАН</a>
             </div>
@@ -74,9 +87,9 @@
     </div>
 
     <div class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fa-solid fa-plane"></i><br>Авиабилеты</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-bed"></i><br>Отели</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i><br>Профиль</a>
+        <a href="#" class="nav-item active"><i class="fa-solid fa-plane" style="font-size: 20px;"></i><br>Авиабилеты</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-bed" style="font-size: 20px;"></i><br>Отели</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-user" style="font-size: 20px;"></i><br>Профиль</a>
     </div>
 
 </body>
