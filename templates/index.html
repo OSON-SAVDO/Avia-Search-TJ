@@ -1,46 +1,50 @@
 <!DOCTYPE html>
-<html lang="{{ lang }}">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviasales TJ - Business</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #f0f4f8; margin: 0; padding: 15px; }
-        .nav { background: #007bff; color: white; padding: 20px; text-align: center; border-radius: 15px; }
-        .search-box { background: white; padding: 20px; border-radius: 20px; margin: 20px auto; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .btn-search { width: 100%; background: #ff6d00; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .ticket-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; border-left: 8px solid #28a745; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .top-row { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 24px; font-weight: bold; color: #28a745; }
-        .btn-wa { background: #25D366; color: white; text-decoration: none; padding: 12px; text-align: center; border-radius: 10px; font-weight: bold; margin-top: 10px; }
-        .seats-tag { font-size: 12px; color: #ff0000; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f3f5; }
+        .ticket { 
+            background: white; border-radius: 12px; display: flex; 
+            max-width: 700px; margin: 15px auto; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .left-side { padding: 20px; flex-grow: 1; border-right: 1px dashed #ddd; }
+        .right-side { 
+            padding: 20px; min-width: 150px; text-align: center; 
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .price { font-size: 22px; font-weight: bold; color: #28a745; margin-bottom: 10px; }
+        .buy-button { 
+            background: #ff6d00; color: white; text-decoration: none; 
+            padding: 10px 20px; border-radius: 8px; font-weight: bold;
+        }
+        .flight-info { display: flex; justify-content: space-between; align-items: center; }
+        .time { font-size: 18px; font-weight: bold; }
+        .city { font-size: 12px; color: #888; }
+        .airline { font-size: 12px; font-weight: bold; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
-    <div class="nav"><h1>aviasales.tj</h1></div>
-
-    <div class="search-box">
-        <form action="/search" method="post">
-            <input type="text" name="from" placeholder="{{ t.from }}">
-            <input type="text" name="to" placeholder="{{ t.to }}">
-            <input type="date" name="departure_date">
-            <button type="submit" class="btn-search">{{ t.search }}</button>
-        </form>
-    </div>
-
-    {% for tkt in tickets %}
-    <div class="ticket-card">
-        <div class="top-row">
-            <span>{{ tkt.logo }} <b>{{ tkt.airline }}</b></span>
-            <span class="seats-tag">{{ t.seats }}: {{ tkt.seats }}</span>
+    {% for flight in flights %}
+    <div class="ticket">
+        <div class="left-side">
+            <span class="airline">{{ flight.logo }} {{ flight.airline }}</span>
+            <div class="flight-info">
+                <div>
+                    <div class="time">{{ flight.dep_time }}</div>
+                    <div class="city">{{ flight.from_city }}</div>
+                </div>
+                <div style="color: #ccc;">── {{ flight.duration }} ──</div>
+                <div>
+                    <div class="time">{{ flight.arr_time }}</div>
+                    <div class="city">{{ flight.arrival_city }}</div>
+                </div>
+            </div>
         </div>
-        <div style="font-size: 18px; font-weight: bold;">{{ tkt.from_city }} ✈️ {{ tkt.to_city }}</div>
-        <div>📅 {{ tkt.date }} | 🕒 {{ tkt.time }}</div>
-        <div class="price">{{ tkt.price }} TJS</div>
-        <a href="https://wa.me/{{ tkt.wa_number }}?text=Салом! Ман мехоҳам чиптаи {{ tkt.from_city }}-{{ tkt.to_city }}-ро ба санаи {{ tkt.date }} харам." target="_blank" class="btn-wa">
-            {{ t.buy }}
-        </a>
+        <div class="right-side">
+            <div class="price">{{ flight.price }} TJS</div>
+            <a href="{{ flight.buy_url }}" target="_blank" class="buy-button">{{ t.buy }}</a>
+        </div>
     </div>
     {% endfor %}
 </body>
