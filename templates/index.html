@@ -6,133 +6,35 @@
     <title>Avia-Search TJ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #007aff; --orange: #ff6d00; --bg: #f2f5f8; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; }
-        
-        /* Кисми болоии кабуд (Акси 5899) */
-        .header-blue { 
-            background: var(--blue); 
-            color: white; 
-            padding: 50px 20px 80px; 
-            text-align: center; 
-            font-size: 24px; 
-            font-weight: bold; 
-        }
-
-        /* Формаи чустучу */
-        .search-container { 
-            background: white; 
-            margin: -50px 20px 20px; 
-            padding: 20px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-        }
-        .input-group { 
-            background: #f0f3f5; 
-            border-radius: 12px; 
-            padding: 15px; 
-            margin-bottom: 10px; 
-            display: flex; 
-            align-items: center; 
-        }
-        .input-group i { color: #888; margin-right: 15px; font-size: 18px; }
-        .input-group input { 
-            border: none; 
-            background: transparent; 
-            width: 100%; 
-            outline: none; 
-            font-size: 16px; 
-            font-weight: 500;
-        }
-
-        .btn-search { 
-            width: 100%; 
-            background: var(--orange); 
-            color: white; 
-            border: none; 
-            padding: 18px; 
-            border-radius: 15px; 
-            font-weight: bold; 
-            font-size: 18px; 
-            margin-top: 10px; 
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* Блокхои иловаги (Горячие билеты и т.д.) */
-        .extra-options { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; 
-            gap: 10px; 
-            padding: 0 20px; 
-            margin-top: 20px; 
-        }
-        .option-card { 
-            background: white; 
-            padding: 15px 5px; 
-            border-radius: 15px; 
-            text-align: center; 
-            font-size: 11px; 
-            font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .option-card i { font-size: 20px; margin-bottom: 8px; display: block; }
-
-        /* Блоки тамос */
-        .contact-box {
-            background: #cdeaff;
-            margin: 20px;
-            padding: 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .contact-info { font-size: 13px; font-weight: bold; }
-        .phone-btn { 
-            background: white; 
-            padding: 8px 15px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            color: black; 
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        body { font-family: -apple-system, sans-serif; background: #f2f5f8; margin: 0; padding-bottom: 20px; }
+        .header { background: #007aff; color: white; padding: 40px 20px 80px; text-align: center; font-size: 22px; font-weight: bold; }
+        .search-container { background: white; margin: -50px 15px 15px; padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .input-row { background: #f0f3f5; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; }
+        .input-row i { color: #888; margin-right: 15px; }
+        input { border: none; background: transparent; width: 100%; outline: none; font-size: 16px; font-weight: 500; }
+        .btn-orange { width: 100%; background: #ff6d00; color: white; border: none; padding: 18px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 15px; }
+        .grid-card { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; font-size: 12px; font-weight: bold; }
+        .contact { background: #cdeaff; margin: 15px; padding: 15px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="header-blue">
-        Тут покупают дешёвые авиабилеты
-    </div>
-
+    <div class="header">Тут покупают дешёвые авиабилеты</div>
     <div class="search-container">
         <form action="/search" method="post">
-            <div class="input-group">
-                <i class="fa fa-search"></i>
-                <input type="text" name="from" placeholder="Душанбе" required>
-            </div>
-            <div class="input-group">
-                <input type="text" name="to" placeholder="Москва" style="margin-left: 33px;" required>
-            </div>
-            <button type="submit" class="btn-search">ҶУСТУҶӮ</button>
+            <div class="input-row"><i class="fa fa-search"></i><input type="text" name="from" placeholder="Душанбе" required></div>
+            <div class="input-row"><input type="text" name="to" placeholder="Москва" style="margin-left:30px;" required></div>
+            <button type="submit" class="btn-orange">Ҷустуҷӯ</button>
         </form>
     </div>
-
-    <div class="extra-options">
-        <div class="option-card"><i class="fa fa-fire" style="color: #ff3b30;"></i>Горячие билеты</div>
-        <div class="option-card"><i class="fa fa-globe" style="color: #4cd964;"></i>Куда угодно</div>
-        <div class="option-card"><i class="fa fa-route" style="color: #5856d6;"></i>Сложный маршрут</div>
+    <div class="grid">
+        <div class="grid-card"><i class="fa fa-fire" style="color:red"></i><br>Горячие билеты</div>
+        <div class="grid-card"><i class="fa fa-globe" style="color:green"></i><br>Куда угодно</div>
+        <div class="grid-card"><i class="fa fa-route" style="color:blue"></i><br>Сложный маршрут</div>
     </div>
-
-    <div class="contact-box">
-        <div class="contact-info">Есть вопросы по билетам? Звоните</div>
-        <a href="tel:+992433778877" class="phone-btn">
-            <i class="fa fa-phone"></i> +992 43 377 88 77
-        </a>
+    <div class="contact">
+        <span>Есть вопросы по билетам? Звоните</span>
+        <a href="tel:+992433778877" style="color:black; text-decoration:none; background:white; padding:8px; border-radius:10px;">+992 43 377 88 77</a>
     </div>
-
 </body>
 </html>
