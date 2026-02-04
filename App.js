@@ -1,75 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList, Text, TouchableOpacity, ScrollView } from 'react-native';
-
-const API_URL = 'http://localhost:3000/api';
+import React, { useState } from 'react';
+import { StyleSheet, View, TextInput, Button, FlatList, Text, Linking, ScrollView } from 'react-native';
 
 export default function App() {
-    const [search, setSearch] = useState({
-        origin: '', destination: '', departDate: '', returnDate: '',
-        adults: 1, children: 0, infants: 0
-    });
-    const [flights, setFlights] = useState([]);
-    const [filteredFlights, setFilteredFlights] = useState([]);
-    const [favorites, setFavorites] = useState([]);
-    const [currency, setCurrency] = useState('USD');
+  const [origin, setOrigin] = useState('DYU');
+  const [destination, setDestination] = useState('MOW');
+  const [departDate, setDepartDate] = useState('2024-12-01');
+  const [flights, setFlights] = useState([]);
 
-    const handleSearch = async () => {
-        const response = await fetch(`${API_URL}/search`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(search)
-        });
-        const data = await response.json();
+  const API_TOKEN = '71876b59812fee6e1539f9365e6a12dd'; // ТОКЕНИ ХУДРО ИНҶО МОНЕД
+  const MARKER = '701004';       // МАРКЕРИ ХУДРО ИНҶО МОНЕД
+
+  const searchFlights = async () => {
+    const url = `https://api.travelpayouts.com/v2/prices/latest?origin=${origin}&destination=${destination}&beginning_of_period=${departDate}&token=${API_TOKEN}&currency=usd`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.success) {
         setFlights(data.data);
-        setFilteredFlights(data.data);
-    };
+      } else {
+        alert("Чипта ёфт нашуд");
+      }
+    } catch (error) {
+      alert("Хатогии пайвастшавӣ ба API");
+    }
+  };
 
-    const applyFilter = (type) => {
-        let sorted = [...flights];
-        if (type === 'cheap') sorted.sort((a, b) => a.value - b.value);
-        if (type === 'direct') sorted = flights.filter(f => f.number_of_changes === 0);
-        setFilteredFlights(sorted);
-    };
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>AVIA-SEARCH APP</Text>
+      
+      <View style={styles.searchBox}>
+        <TextInput style={styles.input} placeholder="Аз куҷо (DYU)" onChangeText={setOrigin} value={origin} />
+        <TextInput style={styles.input} placeholder="Ба куҷо (MOW)" onChangeText={setDestination} value={destination} />
+        <TextInput style={styles.input} placeholder="Сана (YYYY-MM-DD)" onChangeText={setDepartDate} value={departDate} />
+        <Button title="Ҷустуҷӯ" onPress={searchFlights} color="#ff6d00" />
+      </View>
 
-    const toggleFavorite = (flight) => {
-        setFavorites([...favorites, flight]);
-    };
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.searchBox}>
-                <TextInput placeholder="From" onChangeText={(v) => setSearch({...search, origin: v})} />
-                <TextInput placeholder="To" onChangeText={(v) => setSearch({...search, destination: v})} />
-                <TextInput placeholder="Date (YYYY-MM-DD)" onChangeText={(v) => setSearch({...search, departDate: v})} />
-                <Button title="Search Flights" onPress={handleSearch} />
-            </View>
-
-            <View style={styles.filterRow}>
-                <TouchableOpacity onPress={() => applyFilter('cheap')}><Text>Cheapest</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => applyFilter('direct')}><Text>Non-stop</Text></TouchableOpacity>
-            </View>
-
-            <FlatList
-                data={filteredFlights}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <Text style={styles.price}>{item.value} {currency}</Text>
-                        <Text>{item.origin} ➔ {item.destination}</Text>
-                        <Text>Stops: {item.number_of_changes}</Text>
-                        <Button title="Favorite" onPress={() => toggleFavorite(item)} />
-                        <Button title="Book Now" onPress={() => Linking.openURL(`https://www.aviasales.com${item.link}`)} />
-                    </View>
-                )}
-            />
+      {flights.map((item, index) => (
+        <View key={index} style={styles.card}>
+          <Text style={styles.price}>${item.value}</Text>
+          <Text>{item.origin} ➔ {item.destination}</Text>
+          <Text>Сана: {item.depart_date}</Text>
+          <Button 
+            title="ХАРИДАН" 
+            onPress={() => Linking.openURL(`https://www.aviasales.tj/search/${item.origin}${item.depart_date}${item.destination}1?marker=${MARKER}`)} 
+          />
         </View>
-    );
+      ))}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, paddingTop: 50, paddingHorizontal: 20, backgroundColor: '#f5f5f5' },
-    searchBox: { backgroundColor: '#fff', padding: 15, borderRadius: 10, elevation: 5 },
-    filterRow: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 },
-    card: { backgroundColor: '#fff', padding: 20, marginVertical: 8, borderRadius: 10 },
-    price: { fontSize: 20, fontWeight: 'bold', color: '#2ecc71' }
+  container: { flex: 1, padding: 20, backgroundColor: '#f0f4f7' },
+  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginVertical: 20, color: '#007bff' },
+  searchBox: { backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 20 },
+  input: { borderBottomWidth: 1, marginBottom: 15, padding: 8 },
+  card: { backgroundColor: '#fff', padding: 15, borderRadius: 10, marginBottom: 15, borderLeftWidth: 5, borderLeftColor: '#007bff' },
+  price: { fontSize: 22, fontWeight: 'bold', color: '#28a745' }
 });
