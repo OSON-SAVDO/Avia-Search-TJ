@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тафсилоти чипта</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        
+        .container { max-width: 500px; margin: 0 auto; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--blue); text-decoration: none; font-weight: bold; }
+        
+        .ticket-detail-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        .card-header { background: #f8f9fa; padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; }
+        .airline-logo { font-size: 30px; margin-right: 15px; }
+        .airline-name { font-weight: bold; font-size: 18px; }
+
+        .card-body { padding: 25px; }
+        .route-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .city { text-align: center; }
+        .city h2 { margin: 0; font-size: 24px; }
+        .city p { margin: 5px 0; color: #888; }
+        .plane-icon { color: var(--blue); font-size: 20px; }
+
+        .extra-info { background: #fff9f5; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .info-row:last-child { margin-bottom: 0; }
+
+        .buy-section { padding: 20px; border-top: 1px solid #eee; text-align: center; }
+        .price-tag { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 15px; display: block; }
+        .btn-buy { 
+            display: block; width: 100%; background: var(--orange); color: white; 
+            text-decoration: none; padding: 15px; border-radius: 15px; 
+            font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(255,109,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="/" class="back-btn"><i class="fa-solid fa-chevron-left"></i> Баргаштан ба ҷустуҷӯ</a>
+
+        <div class="ticket-detail-card">
+            <div class="card-header">
+                <div class="airline-logo">{{ ticket.logo }}</div>
+                <div class="airline-name">{{ ticket.airline }}</div>
+            </div>
+
+            <div class="card-body">
+                <div class="route-info">
+                    <div class="city">
+                        <h2>{{ ticket.from_city }}</h2>
+                        <p>Душанбе (DYU)</p>
+                    </div>
+                    <div class="plane-icon">
+                        <i class="fa-solid fa-plane"></i>
+                        <hr style="border: none; border-top: 2px dashed #ccc; width: 50px; margin-top: 5px;">
+                    </div>
+                    <div class="city">
+                        <h2>{{ ticket.to_city }}</h2>
+                        <p>Макони таъинот</p>
+                    </div>
+                </div>
+
+                <div class="extra-info">
+                    <div class="info-row">
+                        <span><i class="fa-solid fa-calendar"></i> Сана:</span>
+                        <strong>{{ ticket.date }}</strong>
+                    </div>
+                    <div class="info-row">
+                        <span><i class="fa-solid fa-suitcase"></i> Бағоҷ:</span>
+                        <strong style="color: green;">Дохил мешавад (23кг)</strong>
+                    </div>
+                    <div class="info-row">
+                        <span><i class="fa-solid fa-clock"></i> Намуди парвоз:</span>
+                        <strong>Мустақим</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buy-section">
+                <span class="price-tag">{{ ticket.price }} TJS</span>
+                <a href="{{ ticket.buy_url }}" target="_blank" class="btn-buy">ХАРИДАН ДАР САЙТ</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
