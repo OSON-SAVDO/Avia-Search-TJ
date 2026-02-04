@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маълумоти чипта</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #f2f5f8; margin: 0; padding: 20px; }
+        .ticket-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #ccc; padding-bottom: 15px; }
+        .route { font-size: 20px; font-weight: bold; margin: 20px 0; display: flex; justify-content: space-between; }
+        .details { color: #555; line-height: 1.6; }
+        .buy-button { 
+            display: block; text-align: center; background: #ff6d00; color: white; 
+            text-decoration: none; padding: 15px; border-radius: 12px; 
+            font-weight: bold; font-size: 18px; margin-top: 30px; 
+        }
+        .back-link { display: inline-block; margin-bottom: 15px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Бозгашт</a>
+
+    <div class="ticket-card">
+        <div class="header">
+            <span style="font-size: 24px;">{{ ticket.logo }} {{ ticket.airline }}</span>
+            <span style="color: #007bff; font-weight: bold;">{{ ticket.price }} TJS</span>
+        </div>
+
+        <div class="route">
+            <span>{{ ticket.from_city }}</span>
+            <span>✈️</span>
+            <span>{{ ticket.to_city }}</span>
+        </div>
+
+        <div class="details">
+            <p><strong>Санаи парвоз:</strong> {{ ticket.date }}</p>
+            <p><strong>Вақти парвоз:</strong> 08:30 (Намуна)</p>
+            <p><strong>Бағоҷ:</strong> 23кг дохил мешавад</p>
+            <p><strong>Синфи хидматрасонӣ:</strong> Эконом</p>
+        </div>
+
+        <a href="{{ ticket.buy_url }}" target="_blank" class="buy-button">
+            ХАРИДАН БО {{ ticket.price }} TJS
+        </a>
+    </div>
+
+</body>
+</html>
