@@ -3,36 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avia-Search Realtime</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f2f5f8; margin: 0; }
-        .header { background: #007aff; color: white; padding: 40px 20px 80px; text-align: center; font-size: 22px; font-weight: bold; }
-        .search-card { background: white; margin: -50px 15px 15px; padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .input-row { background: #f0f3f5; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; }
-        input { border: none; background: transparent; width: 100%; outline: none; font-size: 16px; margin-left: 10px; }
-        .btn-orange { width: 100%; background: #ff6d00; color: white; border: none; padding: 18px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 15px; }
-        .grid-card { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; font-size: 12px; font-weight: bold; }
-        .contact { background: #cdeaff; margin: 15px; padding: 15px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: bold; }
+        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding-bottom: 20px; }
+        .top-header { background: var(--blue); color: white; padding: 30px 20px 60px; text-align: center; }
+        .search-container { background: white; margin: -30px 15px 20px; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .input-box { background: #f0f3f5; border-radius: 10px; padding: 10px; margin-bottom: 10px; display: flex; align-items: center; }
+        .input-box input { border: none; background: transparent; width: 100%; outline: none; padding-left: 10px; font-size: 16px; text-transform: uppercase; }
+        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .ticket-list { padding: 0 15px; }
+        .ticket-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: black; border-left: 5px solid var(--orange); }
+        .price { color: var(--blue); font-weight: bold; font-size: 18px; }
+        .no-results { text-align: center; color: #888; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="header">Тут покупают дешёвые авиабилеты</div>
-    <div class="search-card">
+    <div class="top-header"><h1>Чиптаҳои Ҳақиқӣ (API)</h1></div>
+    <div class="search-container">
         <form action="/search" method="post">
-            <div class="input-row"><i class="fa fa-search" style="color:#888"></i><input type="text" name="from" placeholder="Душанбе" required></div>
-            <div class="input-row"><input type="text" name="to" placeholder="Москва" style="margin-left:25px;" required></div>
-            <button type="submit" class="btn-orange">ҶУСТУҶӮ</button>
+            <div class="input-box"><input type="text" name="from" placeholder="Аз (масалан: DYU)" required></div>
+            <div class="input-box"><input type="text" name="to" placeholder="Ба (масалан: MOW)" required></div>
+            <button type="submit" class="btn-search">ҶУСТУҶӮИ НАРХҲО</button>
         </form>
     </div>
-    <div class="grid">
-        <div class="grid-card"><i class="fa fa-fire" style="color:red; font-size:20px;"></i><br>Горячие билеты</div>
-        <div class="grid-card"><i class="fa fa-globe" style="color:green; font-size:20px;"></i><br>Куда угодно</div>
-        <div class="grid-card"><i class="fa fa-route" style="color:blue; font-size:20px;"></i><br>Сложный маршрут</div>
-    </div>
-    <div class="contact">
-        <span>Есть вопросы по билетам? Звоните</span>
-        <a href="tel:+992433778877" style="color:black; text-decoration:none; background:white; padding:8px; border-radius:10px;">+992 43 377 88 77</a>
+
+    <div class="ticket-list">
+        {% if flights %}
+            {% for f in flights %}
+            {% set info = f.airline + "|" + f.price|string + "|" + f.from_city + "|" + f.to_city + "|" + f.date + "|" + f.buy_url %}
+            <a href="{{ url_for('ticket_details', info=info) }}" class="ticket-card">
+                <div>
+                    <div style="font-weight: bold;">Авиаширкат: {{ f.airline }}</div>
+                    <div style="font-size: 14px;">{{ f.from_city }} ✈ {{ f.to_city }}</div>
+                    <div style="font-size: 12px; color: #888;">{{ f.date }}</div>
+                </div>
+                <div class="price">{{ f.price }} TJS</div>
+            </a>
+            {% endfor %}
+        {% elif searched %}
+            <p class="no-results">Чипта ёфт нашуд. Кодҳои IATA-ро тафтиш кунед.</p>
+        {% endif %}
     </div>
 </body>
 </html>
