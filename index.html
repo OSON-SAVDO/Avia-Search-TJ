@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avia-Search | Ҷустуҷӯи Чиптаҳо</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>AVIA-SEARCH</h1>
+            <p>Парвозҳои арзон дар як ҷой</p>
+        </header>
+
+        <section class="search-section">
+            <div class="input-group">
+                <input type="text" id="origin" placeholder="Аз куҷо (Мас: DYU)">
+                <input type="text" id="destination" placeholder="Ба куҷо (Мас: MOW)">
+            </div>
+
+            <div class="input-group">
+                <input type="date" id="departDate" title="Санаи парвоз">
+                <input type="date" id="returnDate" title="Санаи баргашт (ихтиёрӣ)">
+            </div>
+
+            <div class="passengers-box">
+                <div class="p-control">
+                    <label>Калонсол</label>
+                    <input type="number" id="adults" value="1" min="1">
+                </div>
+                <div class="p-control">
+                    <label>Кӯдак</label>
+                    <input type="number" id="children" value="0" min="0">
+                </div>
+                <div class="p-control">
+                    <label>Навзод</label>
+                    <input type="number" id="infants" value="0" min="0">
+                </div>
+            </div>
+
+            <button id="searchBtn">ҶУСТУҶӮ / SEARCH</button>
+        </section>
+
+        <section class="filters" id="filtersArea" style="display:none;">
+            <button onclick="sortTickets('price')">Арзонтарин</button>
+            <button onclick="filterDirect()">Бе таваққуф</button>
+            <button onclick="showPriceMap()">Харитаи нархҳо</button>
+        </section>
+
+        <div id="loader" class="hidden">Дар ҳоли кофтуков...</div>
+        <div id="resultsList"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
