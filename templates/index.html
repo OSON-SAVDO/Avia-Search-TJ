@@ -3,115 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviasales.tj - Клон</title>
+    <title>Aviasales.tj - Чиптаҳои ҳақиқӣ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+        :root { --blue: #007bff; --orange: #ff6d00; --bg: #f2f5f8; --text: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; color: var(--text); }
         
-        /* Header Blue Section */
-        .top-header { background: var(--blue); color: white; padding: 40px 20px 80px; text-align: center; border-radius: 0 0 30px 30px; }
-        .top-header h1 { font-size: 22px; margin: 0; font-weight: 800; }
+        /* Header */
+        .top-header { background: var(--blue); color: white; padding: 40px 20px 70px; text-align: center; border-radius: 0 0 30px 30px; }
+        .top-header h1 { font-size: 24px; margin: 0; font-weight: 800; }
 
-        /* Search Container */
-        .search-container { background: white; margin: -50px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .search-input-group { background: #f0f3f5; border-radius: 15px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; }
-        .search-input-group i { color: #888; margin-right: 12px; width: 20px; text-align: center; }
-        .search-input-group input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; }
+        /* Search Form */
+        .search-container { background: white; margin: -40px 15px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .search-input-group { background: #f0f3f5; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; border: 1px solid #eee; }
+        .search-input-group i { color: #888; margin-right: 12px; width: 20px; }
+        .search-input-group input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; font-weight: 500; }
 
-        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase; }
-
-        /* Icon Menu (Quick Actions) */
-        .quick-actions { display: flex; justify-content: space-around; margin: 20px 15px; }
-        .action-item { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; flex: 1; margin: 0 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .action-item i { font-size: 22px; margin-bottom: 8px; display: block; }
-        .action-item span { font-size: 10px; font-weight: bold; color: #333; display: block; }
-
-        /* Banner Call */
-        .call-banner { background: #b3e5fc; margin: 15px; padding: 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .btn-call { background: white; padding: 8px 12px; border-radius: 10px; text-decoration: none; color: black; font-weight: bold; font-size: 13px; display: flex; align-items: center; margin-top: 8px; }
+        .btn-search { width: 100%; background: var(--orange); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn-search:active { transform: scale(0.98); }
 
         /* Ticket Cards */
         .ticket-list { padding: 0 15px; }
-        .ticket-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--orange); }
-        .price { color: var(--blue); font-size: 18px; font-weight: 800; }
+        .ticket-card { background: white; border-radius: 18px; padding: 16px; margin-bottom: 15px; display: block; text-decoration: none; color: inherit; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .airline-info { display: flex; align-items: center; }
+        .airline-logo { width: 35px; height: 35px; background: #f0f3f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold; color: var(--blue); }
+        .price { color: var(--blue); font-size: 20px; font-weight: 800; }
+
+        .route-info { display: flex; align-items: center; justify-content: space-between; margin: 15px 0; border-top: 1px dashed #eee; border-bottom: 1px dashed #eee; padding: 10px 0; }
+        .city-block { flex: 1; }
+        .city-name { font-weight: bold; font-size: 16px; }
+        .airport-code { font-size: 12px; color: #888; display: block; }
+        
+        .flight-path { flex: 1; text-align: center; position: relative; color: #ccc; }
+        .flight-path i { font-size: 14px; color: var(--blue); }
+
+        .ticket-footer { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; }
+        .direct-badge { color: #27ae60; background: #eafaf1; padding: 4px 8px; border-radius: 6px; }
+        .transfer-badge { color: #e67e22; background: #fdf2e9; padding: 4px 8px; border-radius: 6px; }
 
         /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
-        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 10px; flex: 1; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; }
+        .nav-item { text-align: center; color: #888; text-decoration: none; font-size: 11px; flex: 1; }
         .nav-item.active { color: var(--blue); }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
         
-        .error-msg { color: red; text-align: center; padding: 10px; font-size: 14px; }
+        .error-box { background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 12px; margin: 0 15px 15px; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <h1>Тут покупают дешёвые авиабилеты</h1>
+        <h1>Дешёвые авиабилеты</h1>
     </div>
 
     <div class="search-container">
         <form action="/search" method="post">
             <div class="search-input-group">
                 <i class="fa-solid fa-plane-departure"></i>
-                <input type="text" name="from" placeholder="Откуда (шаҳр)" required>
+                <input type="text" name="from" placeholder="Откуда (Душанбе, DYU)" required>
             </div>
             <div class="search-input-group">
                 <i class="fa-solid fa-location-dot"></i>
-                <input type="text" name="to" placeholder="Куда (шаҳр)" required>
+                <input type="text" name="to" placeholder="Куда (Москва, MOW)" required>
             </div>
-            <button type="submit" class="btn-search">ҶУСТУҶӮ</button>
+            <button type="submit" class="btn-search">Найти билеты</button>
         </form>
     </div>
 
     {% if error %}
-        <div class="error-msg">{{ error }}</div>
+    <div class="error-box">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+    </div>
     {% endif %}
-
-    <div class="quick-actions">
-        <div class="action-item">
-            <i class="fa-solid fa-fire" style="color: #ff3d00;"></i>
-            <span>Горячие билеты</span>
-        </div>
-        <div class="action-item">
-            <i class="fa-solid fa-earth-americas" style="color: #4caf50;"></i>
-            <span>Куда угодно</span>
-        </div>
-        <div class="action-item">
-            <i class="fa-solid fa-route" style="color: #5c6bc0;"></i>
-            <span>Сложный маршрут</span>
-        </div>
-    </div>
-
-    <div class="call-banner">
-        <div>
-            <div style="font-size: 13px; font-weight: bold;">Есть вопросы по билетам? Звоните</div>
-            <a href="tel:+992433778877" class="btn-call">
-                <i class="fa-solid fa-phone" style="margin-right: 8px;"></i> +992 43 377 88 77
-            </a>
-        </div>
-        <i class="fa-solid fa-user-tie" style="font-size: 35px; color: #555;"></i>
-    </div>
 
     <div class="ticket-list">
         {% if flights %}
-            <h3 style="margin-left: 5px; color: #555;">Натиҷаҳои ёфтшуда:</h3>
             {% for f in flights %}
-            {% set info = f.airline + "|" + f.price|string + "|" + f.from_city + "|" + f.to_city + "|" + f.date + "|" + f.buy_url %}
-            <a href="{{ url_for('ticket_details', info=info) }}" class="ticket-card">
-                <div>
-                    <div style="font-weight: bold; font-size: 15px;">{{ f.from_city }} ✈️ {{ f.to_city }}</div>
-                    <div style="font-size: 12px; color: #888; margin-top: 4px;">{{ f.airline }} • {{ f.date }}</div>
+            <a href="{{ f.buy_url }}" target="_blank" class="ticket-card">
+                <div class="ticket-header">
+                    <div class="airline-info">
+                        <div class="airline-logo">{{ f.airline[:2] }}</div>
+                        <span style="font-weight: 600;">{{ f.airline }}</span>
+                    </div>
+                    <div class="price">{{ f.price }} TJS</div>
                 </div>
-                <div class="price">{{ f.price }} TJS</div>
+
+                <div class="route-info">
+                    <div class="city-block">
+                        <span class="city-name">{{ f.from_city }}</span>
+                        <span class="airport-code">Отправление</span>
+                    </div>
+                    <div class="flight-path">
+                        <i class="fa-solid fa-plane"></i>
+                        <div style="height: 2px; background: #eee; width: 100%; position: absolute; top: 50%; z-index: -1;"></div>
+                    </div>
+                    <div class="city-block" style="text-align: right;">
+                        <span class="city-name">{{ f.to_city }}</span>
+                        <span class="airport-code">{{ f.destination_airport }}</span>
+                    </div>
+                </div>
+
+                <div class="ticket-footer">
+                    <span><i class="fa-solid fa-calendar-day"></i> {{ f.date[:10] }}</span>
+                    <span class="{{ 'direct-badge' if 'Мустақим' in f.type else 'transfer-badge' }}">
+                        <i class="fa-solid fa-bolt"></i> {{ f.type }}
+                    </span>
+                </div>
             </a>
             {% endfor %}
         {% endif %}
     </div>
 
     <div class="bottom-nav">
-        <a href="/" class="nav-item active"><i class="fa-solid fa-plane"></i>Авиабилеты</a>
+        <a href="/" class="nav-item active"><i class="fa-solid fa-plane"></i>Билеты</a>
         <a href="#" class="nav-item"><i class="fa-solid fa-bed"></i>Отели</a>
         <a href="#" class="nav-item"><i class="fa-solid fa-heart"></i>Избранное</a>
         <a href="#" class="nav-item"><i class="fa-solid fa-user"></i>Профиль</a>
