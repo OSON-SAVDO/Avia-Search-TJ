@@ -4,25 +4,14 @@ import os
 
 app = Flask(__name__)
 
-# МАЪЛУМОТИ ХУДРО ИНҶО ГУЗОРЕД
+# --- МАЪЛУМОТИ ШАХСӢ ---
 API_TOKEN = '71876b59812fee6e1539f9365e6a12dd'
 MARKER = '701004'
 
-# Рӯйхати ислоҳшудаи фурудгоҳҳо
 AIRPORTS_DB = {
-    "ДУШАНБЕ": "DYU",
-    "МОСКВА": "MOW",
-    "ХУҶАНД": "LBD",
-    "ИСТАНБУЛ": "IST",
-    "САНКТ-ПЕТЕРБУРГ": "LED",
-    "ЕКАТЕРИНБУРГ": "SVX",
-    "НОВОСИБИРСК": "OVB",
-    "ҚАЗОН": "KZN",
-    "АЛМАТЫ": "ALA",
-    "ТОШКЕНТ": "TAS",
-    "ДУБАЙ": "DXB",
-    "КУЛОБ": "TJU",
-    "БОХТАР": "KQT"
+    "ДУШАНБЕ": "DYU", "МОСКВА": "MOW", "ХУҶАНД": "LBD",
+    "ИСТАНБУЛ": "IST", "САНКТ-ПЕТЕРБУРГ": "LED", "ДУБАЙ": "DXB",
+    "ТОШКЕНТ": "TAS", "АЛМАТЫ": "ALA", "КУЛОБ": "TJU"
 }
 
 @app.route('/')
@@ -31,50 +20,61 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    from_input = request.form.get('from_display', '').strip().upper()
-    to_input = request.form.get('to_display', '').strip().upper()
+    # Гирифтани маълумот аз форма
+    from_city = request.form.get('from_city', '').strip().upper()
+    to_city = request.form.get('to_city', '').strip().upper()
+    depart_date = request.form.get('depart_date')
     
-    origin = AIRPORTS_DB.get(from_input)
-    destination = AIRPORTS_DB.get(to_input)
+    # Мусофирон
+    adults = request.form.get('adults', '1')
+    children = request.form.get('children', '0')
+    infants = request.form.get('infants', '0')
+
+    origin = AIRPORTS_DB.get(from_city)
+    destination = AIRPORTS_DB.get(to_city)
 
     if not origin or not destination:
         return render_template('index.html', error="Шаҳр ёфт нашуд. Лутфан номро дуруст нависед.")
 
+    # API барои ҷустуҷӯи нархҳо
     url = "https://api.travelpayouts.com/v3/prices_for_dates"
     params = {
         'origin': origin,
         'destination': destination,
+        'departure_at': depart_date,
         'token': API_TOKEN,
         'currency': 'tjs',
-        'unique': 'true',
-        'limit': 10
+        'sorting': 'price',
+        'limit': 20
     }
     
     try:
         response = requests.get(url, params=params)
         data = response.json()
         flights_list = []
+
         if data.get('success') and 'data' in data:
             for f in data['data']:
-                date_str = f.get('departure_at', '')
-                buy_url = f"https://www.aviasales.tj/search/{origin}{date_str[8:10]}{date_str[5:7]}{destination}1?marker={MARKER}"
+                d_at = f.get('departure_at', '')
+                # Сохтани линки харид бо шумораи мусофирон
+                # Формат: /SEARCH + ORIGIN + DATE + DESTINATION + PASSENGERS
+                date_part = f"{d_at[8:10]}{d_at[5:7]}"
+                buy_url = f"https://www.aviasales.tj/search/{origin}{date_part}{destination}{adults}{children}{infants}?marker={MARKER}"
+                
                 flights_list.append({
                     'airline': f.get('airline'),
                     'price': f.get('price'),
-                    'date': date_str[:10],
-                    'type': "Мустақим" if f.get('transfers') == 0 else f"Таваққуф: {f.get('transfers')}",
-                    'from_city': from_input.capitalize(),
-                    'to_city': to_input.capitalize(),
-                    'origin_code': origin,
-                    'destination_code': destination,
+                    'date': d_at[:10],
+                    'time': d_at[11:16],
+                    'transfers': f.get('transfers'),
+                    'duration': f.get('duration'), # Давомнокии парвоз (дақиқа)
+                    'has_baggage': f.get('has_baggage', False),
                     'buy_url': buy_url
                 })
         
-        if not flights_list:
-            return render_template('index.html', error="Чипта ёфт нашуд.")
-        return render_template('index.html', flights=flights_list)
-    except:
-        return "Хатогии техникӣ"
+        return render_template('index.html', flights=flights_list, origin=from_city, destination=to_city)
+    except Exception as e:
+        return f"Хатогии техникӣ: {str(e)}"
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
